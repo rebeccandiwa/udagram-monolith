@@ -1,0 +1,43 @@
+version: 2.1
+
+jobs:
+  lint-app:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+  build-docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Build docker container for each microservices
+          command: |
+            echo "--------- Installing dependencies-----------"
+          
+            node --version => v160.0
+            npm install nodejs
+            echo "--------- The images is Building ------------"
+            docker build -t udagram-api-feed ./udagram-api-feed
+            docker tag udagram-api-feed rebeccandiwa/udagram-api-feed:v3
+            docker build -t udagram-api-user ./udagram-api-user
+            docker tag udagram-api-user rebeccandiwa/udagram-api-user:v3
+            
+            docker build -t udagram-frontend ./udagram-frontend
+            docker tag udagram-frontend rebeccandiwa/udagram-frontend:v3
+            docker build -t udagram-reverseproxy ./udagram-reverseproxy
+            docker tag udagram-reverseproxy rebeccandiwa/udagram-reverseproxy:v3
+            echo "-------- All images succesfully built----------"
+            echo " ------- login in to hub--------"
+            docker login -u rebeccandiwa -p "$DOCKER_PASSWORD"
+            echo "-------------- Pushing images to dockerhub-------"
+            docker push rebeccandiwa/udagram-api-feed:v1
+            docker push rebeccandiwa/udagram-api-user:v2
+            docker push rebeccandiwa/udagram-frontend:v5
+            docker push rebeccandiwa/udagram-reverseproxy:v4
+workflows:
+  default:
+    jobs:
+      - lint-app
+      - build-docker:
+          requires: [lint-app]
