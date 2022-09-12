@@ -19,14 +19,14 @@ jobs:
             npm install nodejs
             echo "--------- The images is Building ------------"
             docker build -t udagram-api-feed ./udagram-api-feed
-            docker tag udagram-api-feed rebeccandiwa/udagram-api-feed:v3
+            docker tag udagram-api-feed rebeccandiwa/udagram-api-feed:v1
             docker build -t udagram-api-user ./udagram-api-user
-            docker tag udagram-api-user rebeccandiwa/udagram-api-user:v3
+            docker tag udagram-api-user rebeccandiwa/udagram-api-user:v2
             
             docker build -t udagram-frontend ./udagram-frontend
-            docker tag udagram-frontend rebeccandiwa/udagram-frontend:v3
+            docker tag udagram-frontend rebeccandiwa/udagram-frontend:v5
             docker build -t udagram-reverseproxy ./udagram-reverseproxy
-            docker tag udagram-reverseproxy rebeccandiwa/udagram-reverseproxy:v3
+            docker tag udagram-reverseproxy rebeccandiwa/udagram-reverseproxy:v4
             echo "-------- All images succesfully built----------"
             echo " ------- login in to hub--------"
             docker login -u rebeccandiwa -p "$DOCKER_PASSWORD"
